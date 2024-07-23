@@ -71,8 +71,10 @@ class DaysWidget extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       addRepaintBoundaries: false,
       padding: EdgeInsets.zero,
-      crossAxisSpacing: calendarCrossAxisSpacing,
-      mainAxisSpacing: calendarMainAxisSpacing,
+      // crossAxisSpacing: calendarCrossAxisSpacing,
+      // mainAxisSpacing: calendarMainAxisSpacing,
+      crossAxisSpacing: 0,
+      mainAxisSpacing: 0,
       shrinkWrap: true,
       childAspectRatio: aspectRatio ?? 1.0,
       children: List.generate(
