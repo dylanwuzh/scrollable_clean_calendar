@@ -313,6 +313,7 @@ class DaysWidget extends StatelessWidget {
     }
 
     return Container(
+      color: Colors.deepPurple,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: bgColor,
