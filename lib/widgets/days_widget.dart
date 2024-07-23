@@ -308,6 +308,7 @@ class DaysWidget extends StatelessWidget {
           width: 2,
           color: todayBorderColor ?? Theme.of(context).colorScheme.primary.withOpacity(.3),
         );
+        borderRadius = BorderRadius.circular(100);
       }
     }
 
