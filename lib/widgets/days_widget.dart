@@ -22,6 +22,8 @@ class DaysWidget extends StatelessWidget {
   final double radius;
   final TextStyle? textStyle;
   final double? aspectRatio;
+  final bool? todayBorderVisible;
+  final Color? todayBorderColor;
 
   const DaysWidget({
     Key? key,
@@ -39,6 +41,8 @@ class DaysWidget extends StatelessWidget {
     required this.radius,
     required this.textStyle,
     required this.aspectRatio,
+    required this.todayBorderVisible,
+    required this.todayBorderColor,
   }) : super(key: key);
 
   @override
@@ -215,6 +219,7 @@ class DaysWidget extends StatelessWidget {
   }
 
   Widget _beauty(BuildContext context, DayValues values) {
+    Border? border;
     BorderRadiusGeometry? borderRadius;
     Color bgColor = Colors.transparent;
     TextStyle txtStyle =
@@ -296,6 +301,14 @@ class DaysWidget extends StatelessWidget {
             ? FontWeight.bold
             : null,
       );
+    } else if (values.day.isSameDay(DateTime.now())) {
+      // 今天的日期
+      if (todayBorderVisible == true) {
+        border = Border.all(
+          width: 2,
+          color: todayBorderColor ?? Theme.of(context).colorScheme.primary.withOpacity(.3),
+        );
+      }
     }
 
     return Container(
@@ -303,6 +316,7 @@ class DaysWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: borderRadius,
+        border: border,
       ),
       child: Text(
         values.text,
