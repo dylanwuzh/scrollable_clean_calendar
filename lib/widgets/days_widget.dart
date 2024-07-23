@@ -66,81 +66,90 @@ class DaysWidget extends StatelessWidget {
     // If the monthPositionStartDay is equal to 7, then in this layout logic will cause a trouble, beacause it will
     // have a line in blank and in this case 7 is the same as 0.
 
-    return GridView.count(
-      crossAxisCount: DateTime.daysPerWeek,
-      physics: const NeverScrollableScrollPhysics(),
-      addRepaintBoundaries: false,
-      padding: EdgeInsets.zero,
-      // crossAxisSpacing: calendarCrossAxisSpacing,
-      // mainAxisSpacing: calendarMainAxisSpacing,
-      crossAxisSpacing: 0,
-      mainAxisSpacing: 0,
-      shrinkWrap: true,
-      childAspectRatio: aspectRatio ?? 1.0,
-      children: List.generate(
-          DateTime(month.year, month.month + 1, 0).day + start, (index) {
-        if (index < start) return const SizedBox.shrink();
-        final day = DateTime(month.year, month.month, (index + 1 - start));
-        final text = (index + 1 - start).toString();
+    return SizedBox(
+      width: _width(context),
+      child: GridView.count(
+        crossAxisCount: DateTime.daysPerWeek,
+        physics: const NeverScrollableScrollPhysics(),
+        addRepaintBoundaries: false,
+        padding: EdgeInsets.zero,
+        // crossAxisSpacing: calendarCrossAxisSpacing,
+        // mainAxisSpacing: calendarMainAxisSpacing,
+        crossAxisSpacing: 0,
+        mainAxisSpacing: 0,
+        shrinkWrap: true,
+        childAspectRatio: aspectRatio ?? 1.0,
+        children: List.generate(
+            DateTime(month.year, month.month + 1, 0).day + start, (index) {
+          if (index < start) return const SizedBox.shrink();
+          final day = DateTime(month.year, month.month, (index + 1 - start));
+          final text = (index + 1 - start).toString();
 
-        bool isSelected = false;
+          bool isSelected = false;
 
-        if (cleanCalendarController.rangeMinDate != null) {
-          if (cleanCalendarController.rangeMinDate != null &&
-              cleanCalendarController.rangeMaxDate != null) {
-            isSelected = day
-                    .isSameDayOrAfter(cleanCalendarController.rangeMinDate!) &&
-                day.isSameDayOrBefore(cleanCalendarController.rangeMaxDate!);
-          } else {
-            isSelected =
-                day.isAtSameMomentAs(cleanCalendarController.rangeMinDate!);
-          }
-        }
-
-        Widget widget;
-
-        final dayValues = DayValues(
-          day: day,
-          isFirstDayOfWeek: day.weekday == cleanCalendarController.weekdayStart,
-          isLastDayOfWeek: day.weekday == cleanCalendarController.weekdayEnd,
-          isSelected: isSelected,
-          maxDate: cleanCalendarController.maxDate,
-          minDate: cleanCalendarController.minDate,
-          text: text,
-          selectedMaxDate: cleanCalendarController.rangeMaxDate,
-          selectedMinDate: cleanCalendarController.rangeMinDate,
-        );
-
-        if (dayBuilder != null) {
-          widget = dayBuilder!(context, dayValues);
-        } else {
-          widget = <Layout, Widget Function()>{
-            Layout.DEFAULT: () => _pattern(context, dayValues),
-            Layout.BEAUTY: () => _beauty(context, dayValues),
-          }[layout]!();
-        }
-
-        return GestureDetector(
-          onTap: () {
-            if (day.isBefore(cleanCalendarController.minDate) &&
-                !day.isSameDay(cleanCalendarController.minDate)) {
-              if (cleanCalendarController.onPreviousMinDateTapped != null) {
-                cleanCalendarController.onPreviousMinDateTapped!(day);
-              }
-            } else if (day.isAfter(cleanCalendarController.maxDate)) {
-              if (cleanCalendarController.onAfterMaxDateTapped != null) {
-                cleanCalendarController.onAfterMaxDateTapped!(day);
-              }
+          if (cleanCalendarController.rangeMinDate != null) {
+            if (cleanCalendarController.rangeMinDate != null &&
+                cleanCalendarController.rangeMaxDate != null) {
+              isSelected = day.isSameDayOrAfter(
+                      cleanCalendarController.rangeMinDate!) &&
+                  day.isSameDayOrBefore(cleanCalendarController.rangeMaxDate!);
             } else {
-              if (!cleanCalendarController.readOnly) {
-                cleanCalendarController.onDayClick(day);
-              }
+              isSelected =
+                  day.isAtSameMomentAs(cleanCalendarController.rangeMinDate!);
             }
-          },
-          child: widget,
-        );
-      }),
+          }
+
+          Widget widget;
+
+          final dayValues = DayValues(
+            day: day,
+            isFirstDayOfWeek:
+                day.weekday == cleanCalendarController.weekdayStart,
+            isLastDayOfWeek: day.weekday == cleanCalendarController.weekdayEnd,
+            isSelected: isSelected,
+            maxDate: cleanCalendarController.maxDate,
+            minDate: cleanCalendarController.minDate,
+            text: text,
+            selectedMaxDate: cleanCalendarController.rangeMaxDate,
+            selectedMinDate: cleanCalendarController.rangeMinDate,
+          );
+
+          if (dayBuilder != null) {
+            widget = dayBuilder!(context, dayValues);
+          } else {
+            widget = <Layout, Widget Function()>{
+              Layout.DEFAULT: () => _pattern(context, dayValues),
+              Layout.BEAUTY: () => _beauty(context, dayValues),
+            }[layout]!();
+          }
+
+          return GestureDetector(
+            onTap: () {
+              if (day.isBefore(cleanCalendarController.minDate) &&
+                  !day.isSameDay(cleanCalendarController.minDate)) {
+                if (cleanCalendarController.onPreviousMinDateTapped != null) {
+                  cleanCalendarController.onPreviousMinDateTapped!(day);
+                }
+              } else if (day.isAfter(cleanCalendarController.maxDate)) {
+                if (cleanCalendarController.onAfterMaxDateTapped != null) {
+                  cleanCalendarController.onAfterMaxDateTapped!(day);
+                }
+              } else {
+                if (!cleanCalendarController.readOnly) {
+                  cleanCalendarController.onDayClick(day);
+                }
+              }
+            },
+            child: widget,
+          );
+        }),
+      ),
     );
+  }
+
+  double _width(BuildContext context) {
+    final w = MediaQuery.sizeOf(context).width;
+    return (w ~/ 7) * 7.toDouble();
   }
 
   Widget _pattern(BuildContext context, DayValues values) {
@@ -308,7 +317,8 @@ class DaysWidget extends StatelessWidget {
       if (todayBorderVisible == true) {
         border = Border.all(
           width: 2,
-          color: todayBorderColor ?? Theme.of(context).colorScheme.primary.withOpacity(.3),
+          color: todayBorderColor ??
+              Theme.of(context).colorScheme.primary.withOpacity(.3),
         );
         borderRadius = BorderRadius.circular(100);
       }
