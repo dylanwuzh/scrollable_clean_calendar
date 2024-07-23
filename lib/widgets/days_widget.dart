@@ -148,7 +148,7 @@ class DaysWidget extends StatelessWidget {
   }
 
   double _width(BuildContext context) {
-    final w = MediaQuery.sizeOf(context).width;
+    final w = MediaQuery.sizeOf(context).width - 16;
     return (w ~/ 7) * 7.toDouble();
   }
 
