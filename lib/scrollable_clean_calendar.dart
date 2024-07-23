@@ -158,7 +158,8 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
       padding: widget.padding ??
           const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
       separatorBuilder: (_, __) =>
-          SizedBox(height: widget.spaceBetweenCalendars),
+         Container(height: widget.spaceBetweenCalendars, color: Colors.amberAccent ),
+          // SizedBox(height: widget.spaceBetweenCalendars),
       itemCount: widget.calendarController.months.length,
       itemBuilder: (context, index) {
         final month = widget.calendarController.months[index];
@@ -169,12 +170,12 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
   }
 
   Widget scrollablePositionedListCalendar() {
-    return ScrollablePositionedList.separated(
+    return ScrollablePositionedList.builder(
       itemScrollController: widget.calendarController.itemScrollController,
       padding: widget.padding ??
           const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-      separatorBuilder: (_, __) =>
-          SizedBox(height: widget.spaceBetweenCalendars),
+      // separatorBuilder: (_, __) =>
+      //     SizedBox(height: widget.spaceBetweenCalendars),
       itemCount: widget.calendarController.months.length,
       itemBuilder: (context, index) {
         final month = widget.calendarController.months[index];
@@ -188,6 +189,7 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: widget.spaceBetweenCalendars),
         SizedBox(
           width: double.maxFinite,
           child: MonthWidget(

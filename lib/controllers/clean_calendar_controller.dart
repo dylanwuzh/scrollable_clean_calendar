@@ -40,6 +40,9 @@ class CleanCalendarController extends ChangeNotifier {
   /// An initial fucus date
   final DateTime? initialFocusDate;
 
+  /// Range mode can select on date
+  final bool? rangeSingleDate;
+
   late int weekdayEnd;
   List<DateTime> months = [];
 
@@ -58,6 +61,7 @@ class CleanCalendarController extends ChangeNotifier {
     this.onAfterMaxDateTapped,
     this.onPreviousMinDateTapped,
     this.weekdayStart = DateTime.monday,
+    this.rangeSingleDate,
     this.initialFocusDate,
   })  : assert(weekdayStart <= DateTime.sunday),
         assert(weekdayStart >= DateTime.monday) {
@@ -117,8 +121,14 @@ class CleanCalendarController extends ChangeNotifier {
       } else if (date.isBefore(rangeMinDate!)) {
         rangeMaxDate = rangeMinDate;
         rangeMinDate = date;
-      } else if (date.isAfter(rangeMinDate!) || date.isSameDay(rangeMinDate!)) {
+      } else if (date.isAfter(rangeMinDate!)) {
         rangeMaxDate = date;
+      } else if (date.isSameDay(rangeMinDate!)) {
+        if (rangeSingleDate == true) {
+          rangeMaxDate = date;
+        } else {
+          return;
+        }
       }
     } else {
       rangeMinDate = date;
