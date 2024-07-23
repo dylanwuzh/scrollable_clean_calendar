@@ -74,6 +74,12 @@ class ScrollableCleanCalendar extends StatefulWidget {
   /// The radius of day items
   final double dayRadius;
 
+  /// Today border visible
+  final bool? todayBorderVisible;
+
+  /// Today border color
+  final Color? todayBorderColor;
+
   /// A builder to make a customized month
   final Widget Function(BuildContext context, String month)? monthBuilder;
 
@@ -111,6 +117,8 @@ class ScrollableCleanCalendar extends StatefulWidget {
     this.dayTextStyle,
     this.dayAspectRatio,
     this.dayRadius = 6,
+    this.todayBorderVisible,
+    this.todayBorderColor,
     required this.calendarController,
   }) : assert(layout != null ||
             (monthBuilder != null &&
@@ -222,6 +230,8 @@ class _ScrollableCleanCalendarState extends State<ScrollableCleanCalendar> {
                   radius: widget.dayRadius,
                   textStyle: widget.dayTextStyle,
                   aspectRatio: widget.dayAspectRatio,
+                  todayBorderVisible: widget.todayBorderVisible,
+                  todayBorderColor: widget.todayBorderColor,
                 );
               },
             )
